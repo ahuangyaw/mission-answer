@@ -1,0 +1,24 @@
+.index-page {
+  background-image: url("../../assets/jingliu.jpg");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  height: 100vh;
+  .title {
+    color: white;
+    text-align: center;
+    padding-top: 48px;
+  }
+  .submit-title {
+    color: white;
+    margin-bottom: 48px;
+    text-align: center;
+  }
+  .enter-btn {
+    width: 60vw;
+    top: 8vh;
+  }
+  .image {
+    width: 100%;
+  }
+
+}
