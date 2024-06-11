@@ -1,6 +1,8 @@
 package asia.huangzhitao.missionAnswerBackend.service;
 
 import javax.annotation.Resource;
+
+import asia.huangzhitao.missionAnswerBackend.controller.UserController;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,19 +18,17 @@ public class UserServiceTest {
     @Resource
     private UserService userService;
 
+    @Resource
+    private UserController userController;
+
     @Test
     void userRegister() {
-        String userAccount = "yupi";
-        String userPassword = "";
-        String checkPassword = "123456";
-        try {
-            long result = userService.userRegister(userAccount, userPassword, checkPassword);
-            Assertions.assertEquals(-1, result);
-            userAccount = "yu";
-            result = userService.userRegister(userAccount, userPassword, checkPassword);
-            Assertions.assertEquals(-1, result);
-        } catch (Exception e) {
+        String userAccount = "";
+        String userPassword = "12345678";
+        String checkPassword = "12345678";
 
-        }
+        long result = userService.userRegister(userAccount, userPassword, checkPassword);
+        Assertions.assertNotEquals(-1, result);
+
     }
 }
