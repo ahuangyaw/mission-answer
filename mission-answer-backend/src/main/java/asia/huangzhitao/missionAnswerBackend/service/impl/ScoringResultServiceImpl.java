@@ -69,7 +69,7 @@ public class ScoringResultServiceImpl extends ServiceImpl<ScoringResultMapper, S
         }
         if (appId != null) {
             App app = appService.getById(appId);
-            ThrowUtils.throwIf(app != null, ErrorCode.PARAMS_ERROR, "应用不存在");
+            ThrowUtils.throwIf(app == null, ErrorCode.PARAMS_ERROR, "应用不存在");
         }
     }
 

@@ -12,9 +12,13 @@ import asia.huangzhitao.missionAnswerBackend.model.dto.useranswer.UserAnswerAddR
 import asia.huangzhitao.missionAnswerBackend.model.dto.useranswer.UserAnswerEditRequest;
 import asia.huangzhitao.missionAnswerBackend.model.dto.useranswer.UserAnswerQueryRequest;
 import asia.huangzhitao.missionAnswerBackend.model.dto.useranswer.UserAnswerUpdateRequest;
+import asia.huangzhitao.missionAnswerBackend.model.entity.App;
 import asia.huangzhitao.missionAnswerBackend.model.entity.User;
 import asia.huangzhitao.missionAnswerBackend.model.entity.UserAnswer;
+import asia.huangzhitao.missionAnswerBackend.model.enums.ReviewStatusEnum;
 import asia.huangzhitao.missionAnswerBackend.model.vo.UserAnswerVO;
+import asia.huangzhitao.missionAnswerBackend.scoring.ScoringStrategyExecutor;
+import asia.huangzhitao.missionAnswerBackend.service.AppService;
 import asia.huangzhitao.missionAnswerBackend.service.UserAnswerService;
 import asia.huangzhitao.missionAnswerBackend.service.UserService;
 import cn.hutool.json.JSONUtil;
@@ -41,6 +45,13 @@ public class UserAnswerController {
     @Resource
     private UserService userService;
 
+    @Resource
+    private ScoringStrategyExecutor scoringStrategyExecutor;
+
+    @Resource
+    private AppService appService;
+
+
     // region 增删改查
 
     /**
@@ -60,6 +71,13 @@ public class UserAnswerController {
         userAnswer.setChoices(JSONUtil.toJsonStr(choices));
         // 数据校验
         userAnswerService.validUserAnswer(userAnswer, true);
+        // 判断app是否存在
+        Long appId = userAnswerAddRequest.getAppId();
+        App app = appService.getById(appId);
+        ThrowUtils.throwIf(app == null, ErrorCode.NOT_FOUND_ERROR);
+        if (!ReviewStatusEnum.PASS.equals(ReviewStatusEnum.getEnumByValue(app.getReviewStatus()))) {
+            throw new BusinessException(ErrorCode.NO_AUTH_ERROR, "应用未通过审核，无法答题");
+        }
         // 填充默认值
         User loginUser = userService.getLoginUser(request);
         userAnswer.setUserId(loginUser.getId());
@@ -68,6 +86,15 @@ public class UserAnswerController {
         ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
         // 返回新写入的数据 id
         long newUserAnswerId = userAnswer.getId();
+        // 调用评分模块
+        try {
+            UserAnswer userAnswerWithResult = scoringStrategyExecutor.doScore(choices, app);
+            userAnswerWithResult.setId(newUserAnswerId);
+            userAnswerService.updateById(userAnswerWithResult);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BusinessException(ErrorCode.OPERATION_ERROR, "评分失败");
+        }
         return ResultUtils.success(newUserAnswerId);
     }
 
@@ -218,7 +245,7 @@ public class UserAnswerController {
         if (userAnswerEditRequest == null || userAnswerEditRequest.getId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        // todo 在此处将实体类和 DTO 进行转换
+        // 在此处将实体类和 DTO 进行转换
         UserAnswer userAnswer = new UserAnswer();
         BeanUtils.copyProperties(userAnswerEditRequest, userAnswer);
         List<String> choices = userAnswerEditRequest.getChoices();
