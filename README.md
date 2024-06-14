@@ -61,7 +61,7 @@
 
 ## 二、技术选型
 
-### 前端
+### 前端：[mission-answer/mission-answer-frontend at master · ahuangyaw/mission-answer (github.com)](https://github.com/ahuangyaw/mission-answer/tree/master/mission-answer-frontend)
 
 #### Web 网页开发
 
@@ -77,15 +77,15 @@
 
 
 
-#### 小程序开发
+#### 小程序开发：[mission-answer/mbti-test-mini at master · ahuangyaw/mission-answer (github.com)](https://github.com/ahuangyaw/mission-answer/tree/master/mbti-test-mini)
 
 - React
 - Taro 跨端开发框架
 - Taro UI 组件库
 
-[mission-answer/mbti-test-mini at master · ahuangyaw/mission-answer (github.com)](https://github.com/ahuangyaw/mission-answer/tree/master/mbti-test-mini)
+### 后端：[mission-answer/mission-answer-backend at master · ahuangyaw/mission-answer (github.com)](https://github.com/ahuangyaw/mission-answer/tree/master/mission-answer-backend)
 
-### 后端：
+
 
 - Java Spring Boot 开发框架（万用后端模板）
 - 存储层：MySQL 数据库 + Redis 缓存 + 腾讯云 COS 对象存储
@@ -98,6 +98,4 @@
 - ⭐️ SSE 服务端推送
 - ⭐️ 多种设计模式
 - ⭐️ 多角度项目优化：性能、稳定性、幂等性优化等
-
-[mission-answer/mission-answer-backend at master · ahuangyaw/mission-answer (github.com)](https://github.com/ahuangyaw/mission-answer/tree/master/mission-answer-backend)
 
