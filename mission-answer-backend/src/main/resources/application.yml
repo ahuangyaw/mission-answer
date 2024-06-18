@@ -70,3 +70,7 @@ knife4j:
         api-rule: package
         api-rule-resources:
           - asia.huangzhitao.missionAnswerBackend.controller
+
+# AI 配置
+ai:
+  apiKey: 416128eea7bff188f5c5e4f503193d9e.SMKQ1mXGqEo4W0j3
