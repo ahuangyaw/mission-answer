@@ -1,16 +1,14 @@
 <template>
-  <div id="doAnswerView">
+  <div id="doAnswerPage">
     <a-card>
       <h1>{{ app.appName }}</h1>
       <p>{{ app.appDesc }}</p>
-      <!--      <h2 style="margin-bottom: 32px">-->
-      <!--        {{ current }} 、 {{ currentQuestion?.title }}-->
-      <!--      </h2>-->
-      <h2 style="margin-bottom: 32px">
-        {{ currentQuestion?.title }}
+      <h2 style="margin-bottom: 16px">
+        {{ current }}、{{ currentQuestion?.title }}
       </h2>
       <div>
         <a-radio-group
+          direction="vertical"
           v-model="currentAnswer"
           :options="questionOptions"
           @change="doRadioChange"
@@ -30,11 +28,12 @@
           <a-button
             type="primary"
             v-if="current === questionContent.length"
+            :loading="submitting"
             circle
             :disabled="!currentAnswer"
             @click="doSubmit"
           >
-            查看结果
+            {{ submitting ? "评分中" : "查看结果" }}
           </a-button>
           <a-button v-if="current > 1" circle @click="current -= 1">
             上一题
@@ -44,6 +43,7 @@
     </a-card>
   </div>
 </template>
+
 <script setup lang="ts">
 import {
   computed,
@@ -53,8 +53,8 @@ import {
   watchEffect,
   withDefaults,
 } from "vue";
-import { useRouter } from "vue-router";
 import API from "@/api";
+import { useRouter } from "vue-router";
 import { listQuestionVoByPageUsingPost } from "@/api/questionController";
 import message from "@arco-design/web-vue/es/message";
 import { getAppVoByIdUsingGet } from "@/api/appController";
@@ -71,15 +71,16 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const router = useRouter();
+
 const app = ref<API.AppVO>({});
 // 题目内容结构（理解为题目列表）
 const questionContent = ref<API.QuestionContentDTO[]>([]);
 
-// 当前题目的序号
+// 当前题目的序号（从 1 开始）
 const current = ref(1);
 // 当前题目
 const currentQuestion = ref<API.QuestionContentDTO>({});
-// 当前题目的选项
+// 当前题目选项
 const questionOptions = computed(() => {
   return currentQuestion.value?.options
     ? currentQuestion.value.options.map((option) => {
@@ -94,6 +95,8 @@ const questionOptions = computed(() => {
 const currentAnswer = ref<string>();
 // 回答列表
 const answerList = reactive<string[]>([]);
+// 是否正在提交结果
+const submitting = ref(false);
 
 /**
  * 加载数据
@@ -102,12 +105,12 @@ const loadData = async () => {
   if (!props.appId) {
     return;
   }
-  // 获取app
+  // 获取 app
   let res: any = await getAppVoByIdUsingGet({
     id: props.appId as any,
   });
-  if (res.data.code === 0 && res.data.data) {
-    app.value = res.data.data;
+  if (res.data.code === 0) {
+    app.value = res.data.data as any;
   } else {
     message.error("获取应用失败，" + res.data.message);
   }
@@ -120,7 +123,7 @@ const loadData = async () => {
     sortOrder: "descend",
   });
   if (res.data.code === 0 && res.data.data?.records) {
-    questionContent.value = res.data.data?.records[0].questionContent;
+    questionContent.value = res.data.data.records[0].questionContent;
   } else {
     message.error("获取题目失败，" + res.data.message);
   }
@@ -131,7 +134,7 @@ watchEffect(() => {
   loadData();
 });
 
-// 获取旧数据
+// 改变 current 题号后，会自动更新当前题目和答案
 watchEffect(() => {
   currentQuestion.value = questionContent.value[current.value - 1];
   currentAnswer.value = answerList[current.value - 1];
@@ -152,18 +155,16 @@ const doSubmit = async () => {
   if (!props.appId || !answerList) {
     return;
   }
+  submitting.value = true;
   const res = await addUserAnswerUsingPost({
     appId: props.appId as any,
     choices: answerList,
   });
   if (res.data.code === 0 && res.data.data) {
-    await router.push(`/answer/result/${res.data.data}`);
+    router.push(`/answer/result/${res.data.data}`);
   } else {
     message.error("提交答案失败，" + res.data.message);
   }
+  submitting.value = false;
 };
 </script>
-<style scoped>
-#doAnswerView {
-}
-</style>

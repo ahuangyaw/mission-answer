@@ -1,6 +1,5 @@
 <template>
-  <div id="answerResultView">
-    <h2 style="margin-bottom: 32px">查看结果</h2>
+  <div id="answerResultPage">
     <a-card>
       <a-row style="margin-bottom: 16px">
         <a-col flex="auto" class="content-wrapper">
@@ -43,13 +42,15 @@
     </a-card>
   </div>
 </template>
+
 <script setup lang="ts">
 import { defineProps, ref, watchEffect, withDefaults } from "vue";
-import API from "@/api/typings";
+import API from "@/api";
 import { getUserAnswerVoByIdUsingGet } from "@/api/userAnswerController";
 import message from "@arco-design/web-vue/es/message";
-import { APP_SCORING_STRATEGY_MAP, APP_TYPE_MAP } from "@/constant/app";
+import { useRouter } from "vue-router";
 import { dayjs } from "@arco-design/web-vue/es/_utils/date";
+import { APP_SCORING_STRATEGY_MAP, APP_TYPE_MAP } from "../../constant/app";
 
 interface Props {
   id: string;
@@ -60,6 +61,8 @@ const props = withDefaults(defineProps<Props>(), {
     return "";
   },
 });
+
+const router = useRouter();
 
 const data = ref<API.UserAnswerVO>({});
 
@@ -87,7 +90,12 @@ watchEffect(() => {
   loadData();
 });
 </script>
+
 <style scoped>
-#answerResultView {
+#answerResultPage {
+}
+
+#answerResultPage .content-wrapper > * {
+  margin-bottom: 24px;
 }
 </style>
