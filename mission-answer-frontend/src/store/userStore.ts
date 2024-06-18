@@ -21,13 +21,6 @@ export const useLoginUserStore = defineStore("loginUser", () => {
     if (res.data.code === 0 && res.data.data) {
       loginUser.value = res.data.data;
     } else {
-      setTimeout(() => {
-        loginUser.value = {
-          id: 1,
-          userName: "111",
-          userRole: ACCESS_ENUM.ADMIN,
-        };
-      }, 3000);
       loginUser.value = { userRole: ACCESS_ENUM.NOT_LOGIN };
     }
   }
