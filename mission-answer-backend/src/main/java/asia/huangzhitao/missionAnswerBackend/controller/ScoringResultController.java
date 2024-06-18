@@ -100,7 +100,7 @@ public class ScoringResultController {
     }
 
     /**
-     * 更新评分结果表（仅管理员可用）
+     * 更新评分结果（仅管理员可用）
      *
      * @param scoringResultUpdateRequest
      * @return
