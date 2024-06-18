@@ -1,6 +1,8 @@
 package asia.huangzhitao.missionAnswerBackend.config;
 
+import asia.huangzhitao.missionAnswerBackend.utils.SqlInterceptor;
 import com.baomidou.mybatisplus.annotation.DbType;
+import com.baomidou.mybatisplus.autoconfigure.ConfigurationCustomizer;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import org.mybatis.spring.annotation.MapperScan;
@@ -26,5 +28,16 @@ public class MyBatisPlusConfig {
         // 分页插件
         interceptor.addInnerInterceptor(new PaginationInnerInterceptor(DbType.MYSQL));
         return interceptor;
+    }
+
+    /**
+     * 打印SQL插件
+     * @return
+     */
+    @Bean
+    public ConfigurationCustomizer mybatisConfigurationCustomizer() {
+        return configuration -> {
+            configuration.addInterceptor(new SqlInterceptor());
+        };
     }
 }
