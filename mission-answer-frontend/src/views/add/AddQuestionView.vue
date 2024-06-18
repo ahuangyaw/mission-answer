@@ -1,5 +1,5 @@
 <template>
-  <div id="addQuestionView">
+  <div id="addQuestionPage">
     <h2 style="margin-bottom: 32px">设置题目</h2>
     <a-form
       class="form"
@@ -9,19 +9,25 @@
       auto-label-width
       @submit="handleSubmit"
     >
-      <a-form-item label="应用id"> {{ appId }} </a-form-item>
+      <a-form-item label="应用 id">
+        {{ appId }}
+      </a-form-item>
       <a-form-item label="题目列表" :content-flex="false" :merge-props="false">
-        <a-button @click="addQuestion(questionContent.length)">
-          底部添加题目
-        </a-button>
+        <a-space size="medium">
+          <a-button @click="addQuestion(questionContent.length)">
+            底部添加题目
+          </a-button>
+          <!-- AI 生成抽屉 -->
+          <AiGenerateQuestionDrawer
+            :appId="appId"
+            :onSuccess="onAiGenerateSuccess"
+          />
+        </a-space>
+        <!-- 遍历每道题目 -->
         <div v-for="(question, index) in questionContent" :key="index">
           <a-space size="large">
             <h3>题目 {{ index + 1 }}</h3>
-            <a-button
-              size="small"
-              type="primary"
-              @click="addQuestion(index + 1)"
-            >
+            <a-button size="small" @click="addQuestion(index + 1)">
               添加题目
             </a-button>
             <a-button
@@ -32,10 +38,10 @@
               删除题目
             </a-button>
           </a-space>
-          <a-form-item field="posts.post1" :label="`题目${index + 1}标题`">
+          <a-form-item field="posts.post1" :label="`题目 ${index + 1} 标题`">
             <a-input v-model="question.title" placeholder="请输入标题" />
           </a-form-item>
-          <!--  题目选项start -->
+          <!--  题目选项 -->
           <a-space size="large">
             <h4>题目 {{ index + 1 }} 选项列表</h4>
             <a-button
@@ -83,7 +89,7 @@
               </a-button>
             </a-space>
           </a-form-item>
-          <!--  题目选项end   -->
+          <!-- 题目选项结尾 -->
         </div>
       </a-form-item>
       <a-form-item>
@@ -98,13 +104,14 @@
 <script setup lang="ts">
 import { defineProps, ref, watchEffect, withDefaults } from "vue";
 import API from "@/api";
-import message from "@arco-design/web-vue/es/message";
 import { useRouter } from "vue-router";
 import {
   addQuestionUsingPost,
   editQuestionUsingPost,
   listQuestionVoByPageUsingPost,
 } from "@/api/questionController";
+import message from "@arco-design/web-vue/es/message";
+import AiGenerateQuestionDrawer from "@/views/add/components/AiGenerateQuestionDrawer.vue";
 
 interface Props {
   appId: string;
@@ -120,8 +127,10 @@ const router = useRouter();
 
 // 题目内容结构（理解为题目列表）
 const questionContent = ref<API.QuestionContentDTO[]>([]);
+
 /**
  * 添加题目
+ * @param index
  */
 const addQuestion = (index: number) => {
   questionContent.value.splice(index, 0, {
@@ -129,12 +138,15 @@ const addQuestion = (index: number) => {
     options: [],
   });
 };
+
 /**
  * 删除题目
+ * @param index
  */
 const deleteQuestion = (index: number) => {
   questionContent.value.splice(index, 1);
 };
+
 /**
  * 添加题目选项
  * @param question
@@ -149,6 +161,7 @@ const addQuestionOption = (question: API.QuestionContentDTO, index: number) => {
     value: "",
   });
 };
+
 /**
  * 删除题目选项
  * @param question
@@ -163,6 +176,7 @@ const deleteQuestionOption = (
   }
   question.options.splice(index, 1);
 };
+
 const oldQuestion = ref<API.QuestionVO>();
 
 /**
@@ -224,7 +238,16 @@ const handleSubmit = async () => {
     message.error("操作失败，" + res.data.message);
   }
 };
+
+/**
+ * AI 生成题目成功后执行
+ */
+const onAiGenerateSuccess = (result: API.QuestionContentDTO[]) => {
+  message.success(`AI 生成题目成功，生成 ${result.length} 道题目`);
+  questionContent.value = [...questionContent.value, ...result];
+};
 </script>
+
 <style scoped>
 .form {
   position: absolute;

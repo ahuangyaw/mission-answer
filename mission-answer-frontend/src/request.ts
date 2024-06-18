@@ -3,7 +3,7 @@ import { Modal } from "@arco-design/web-vue";
 
 const myAxios = axios.create({
   baseURL: "http://localhost:8101",
-  timeout: 1000,
+  timeout: 60000,
   headers: { "X-Custom-Header": "foobar" },
   withCredentials: true,
 });
