@@ -44,8 +44,6 @@
   - AI 评分
   - 管理评分结果 - 增删改查（仅管理员可用）
 
-  
-
 - 回答模块
 
   - 提交回答（创建）
@@ -61,9 +59,7 @@
 
 ## 二、技术选型
 
-### 前端：[mission-answer/mission-answer-frontend at master · ahuangyaw/mission-answer (github.com)](https://github.com/ahuangyaw/mission-answer/tree/master/mission-answer-frontend)
-
-#### Web 网页开发
+### 前端：[https://github.com/ahuangyaw/mission-answer/mission-answer-frontend](https://github.com/ahuangyaw/mission-answer/tree/master/mission-answer-frontend)
 
 - Vue 3 
 - Vue-CLI 脚手架
@@ -77,15 +73,13 @@
 
 
 
-#### 小程序开发：[mission-answer/mbti-test-mini at master · ahuangyaw/mission-answer (github.com)](https://github.com/ahuangyaw/mission-answer/tree/master/mbti-test-mini)
+### 小程序开发：https://github.com/ahuangyaw/mission-answer/mbti-test-mini
 
 - React
 - Taro 跨端开发框架
 - Taro UI 组件库
 
-### 后端：[mission-answer/mission-answer-backend at master · ahuangyaw/mission-answer (github.com)](https://github.com/ahuangyaw/mission-answer/tree/master/mission-answer-backend)
-
-
+### 后端：[https://github.com/ahuangyaw/mission-answer/mission-answer-backend](https://github.com/ahuangyaw/mission-answer/tree/master/mission-answer-backend)
 
 - Java Spring Boot 开发框架（万用后端模板）
 - 存储层：MySQL 数据库 + Redis 缓存 + 腾讯云 COS 对象存储
