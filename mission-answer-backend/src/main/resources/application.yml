@@ -74,3 +74,13 @@ knife4j:
 # AI 配置
 ai:
   apiKey: 416128eea7bff188f5c5e4f503193d9e.SMKQ1mXGqEo4W0j3
+
+# 对象存储服务配置
+minio:
+# MinIO自搭建对象存储服务
+  endpoint:
+    http://47.120.42.45:9000
+  # todo 存储服务域名
+  accessKey:
+  secretKey:
+  bucketName:    #存储桶名称
