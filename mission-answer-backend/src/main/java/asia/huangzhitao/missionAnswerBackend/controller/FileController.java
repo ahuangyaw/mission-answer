@@ -3,7 +3,7 @@ package asia.huangzhitao.missionAnswerBackend.controller;
 import asia.huangzhitao.missionAnswerBackend.common.BaseResponse;
 import asia.huangzhitao.missionAnswerBackend.common.ErrorCode;
 import asia.huangzhitao.missionAnswerBackend.common.ResultUtils;
-import asia.huangzhitao.missionAnswerBackend.config.MinioConfiguration;
+import asia.huangzhitao.missionAnswerBackend.config.MinioConfig;
 import asia.huangzhitao.missionAnswerBackend.constant.FileConstant;
 import asia.huangzhitao.missionAnswerBackend.exception.BusinessException;
 import asia.huangzhitao.missionAnswerBackend.manager.CosManager;
@@ -13,20 +13,17 @@ import asia.huangzhitao.missionAnswerBackend.model.enums.FileUploadBizEnum;
 import asia.huangzhitao.missionAnswerBackend.service.UserService;
 import cn.hutool.core.io.FileUtil;
 import io.minio.MinioClient;
-import io.minio.PutObjectArgs;
-import io.minio.errors.MinioException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
 /**
@@ -47,7 +44,7 @@ public class FileController {
     private MinioClient minioClient;
 
     @Resource
-    private MinioConfiguration minioConfiguration;
+    private MinioConfig minioConfig;
 
     /**
      * 文件上传
@@ -112,31 +109,6 @@ public class FileController {
             if (!Arrays.asList("jpeg", "jpg", "svg", "png", "webp").contains(fileSuffix)) {
                 throw new BusinessException(ErrorCode.PARAMS_ERROR, "文件类型错误");
             }
-        }
-    }
-
-    /**
-     * 上传文件
-     */
-    @PostMapping("/minio/upload")
-    public String minioUploadFile(@RequestParam("file") MultipartFile file,UploadFileRequest uploadFileRequest) {
-        String biz = uploadFileRequest.getBiz();
-        FileUploadBizEnum fileUploadBizEnum = FileUploadBizEnum.getEnumByValue(biz);
-        validFile(file, fileUploadBizEnum);
-        try {
-            InputStream inputStream = file.getInputStream();
-            minioClient.putObject(
-                    PutObjectArgs.builder()
-                            .bucket(minioConfiguration.getMinioBucketName())
-                            .object(file.getOriginalFilename())
-                            .stream(inputStream, inputStream.available(), -1)
-                            .contentType(file.getContentType())
-                            .build()
-            );
-            return "File uploaded successfully!";
-        } catch (MinioException | IOException | NoSuchAlgorithmException | InvalidKeyException e) {
-            e.printStackTrace();
-            return "Error uploading file to MinIO: " + e.getMessage();
         }
     }
 }

@@ -6,6 +6,7 @@ import com.qcloud.cos.auth.BasicCOSCredentials;
 import com.qcloud.cos.auth.COSCredentials;
 import com.qcloud.cos.region.Region;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,25 +20,28 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "cos.client")
 @Data
 public class CosClientConfig {
-
     /**
      * accessKey
      */
+    @Value("${minio.accessKey}")
     private String accessKey;
 
     /**
      * secretKey
      */
+    @Value("${minio.secretKey}")
     private String secretKey;
 
     /**
      * 区域
      */
+    @Value("${minio.endpoint}")
     private String region;
 
     /**
      * 桶名
      */
+    @Value("${minio.bucketName}")
     private String bucket;
 
     @Bean

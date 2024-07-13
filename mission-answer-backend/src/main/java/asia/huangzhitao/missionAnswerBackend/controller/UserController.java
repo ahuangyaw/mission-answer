@@ -13,6 +13,7 @@ import asia.huangzhitao.missionAnswerBackend.model.entity.User;
 import asia.huangzhitao.missionAnswerBackend.model.vo.LoginUserVO;
 import asia.huangzhitao.missionAnswerBackend.model.vo.UserVO;
 import asia.huangzhitao.missionAnswerBackend.service.UserService;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -133,6 +134,13 @@ public class UserController {
         String defaultPassword = "12345678";
         String encryptPassword = DigestUtils.md5DigestAsHex((SALT + defaultPassword).getBytes());
         user.setUserPassword(encryptPassword);
+        // 账户不能重复
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("userAccount", user.getUserAccount());
+        long count = userService.getBaseMapper().selectCount(queryWrapper);
+        if (count > 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "账号重复");
+        }
         boolean result = userService.save(user);
         ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
         return ResultUtils.success(user.getId());

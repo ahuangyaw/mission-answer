@@ -8,9 +8,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.beans.factory.annotation.Value;
 
 @Configuration
-@ConfigurationProperties(prefix = "file.minio")
+@ConfigurationProperties(prefix = "minio")
 @Data
-public class MinioConfiguration {
+public class MinioConfig {
 
     @Value("${minio.endpoint}")
     private String minioEndpoint;

@@ -9,7 +9,7 @@
         <a-menu-item
           key="0"
           :style="{ padding: 0, marginRight: '38px' }"
-          disabled
+          @click="router.push('/')"
         >
           <div class="titleBar">
             <img class="logo" src="../assets/fu.png" alt="titleBar" />

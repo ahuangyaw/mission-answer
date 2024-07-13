@@ -7,17 +7,49 @@ spring:
   # todo 需替换配置
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/my_db
+    url: jdbc:mysql://47.120.42.45:3306/mission_answer
     username: root
-    password: 123456
+    password: xiaoHuang@3846
   # Redis 配置
   # todo 需替换配置
   redis:
     database: 1
-    host: localhost
+    host: 47.120.42.45
     port: 6379
     timeout: 5000
-    password: 123456
+    password: xiaoHuang@3846
+  # 分库分表配置
+  shardingsphere:
+    #数据源配置
+    datasource:
+      # 多数据源以逗号隔开即可
+      names: mission_answer
+      mission_answer:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        jdbc-url: jdbc:mysql://47.120.42.45:3306/mission_answer?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true&characterEncoding=utf8
+        username: root
+        password: xiaoHuang@3846
+    # 规则配置
+    rules:
+      sharding:
+        # 分片算法配置
+        sharding-algorithms:
+          # 自定义分片规则名
+          answer-table-inline:
+            ## inline 类型是简单的配置文件里面就能写的类型，其他还有自定义类等等
+            type: INLINE
+            props:
+              algorithm-expression: user_answer_$->{appId % 2}
+        tables:
+          user_answer:
+            actual-data-nodes: mission_answer.user_answer_$->{0..1}
+            # 分表策略
+            table-strategy:
+              standard:
+                sharding-column: appId
+                sharding-algorithm-name: answer-table-inline
+
 mybatis-plus:
   configuration:
     # 生产环境关闭日志
@@ -27,4 +59,16 @@ knife4j:
   basic:
     enable: true
     username: root
-    password: 123456
+    password: xiaoHuang@3846
+# AI 配置
+ai:
+  apiKey: 416128eea7bff188f5c5e4f503193d9e.SMKQ1mXGqEo4W0j3
+
+# 对象存储服务配置
+minio:
+  # MinIO自搭建对象存储服务
+  # todo 存储服务域名
+  endpoint: http://47.120.42.45:9000
+  accessKey: M9EOLTH2OKWR7NQPKSIE
+  secretKey: 1unqUqQigxVbSB82qkUfBX28gLKEfxABahRxR646
+  bucketName: file   #存储桶名称

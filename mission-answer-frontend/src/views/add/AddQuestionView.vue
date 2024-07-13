@@ -21,6 +21,9 @@
           <AiGenerateQuestionDrawer
             :appId="appId"
             :onSuccess="onAiGenerateSuccess"
+            :onSSESuccess="onAiGenerateSuccessSSE"
+            :onSSEStart="onSSEStart"
+            :onSSEClose="onSSEClose"
           />
         </a-space>
         <!-- 遍历每道题目 -->
@@ -246,16 +249,37 @@ const onAiGenerateSuccess = (result: API.QuestionContentDTO[]) => {
   message.success(`AI 生成题目成功，生成 ${result.length} 道题目`);
   questionContent.value = [...questionContent.value, ...result];
 };
+
+/**
+ * AI 生成题目成功后执行(SSE)
+ */
+const onAiGenerateSuccessSSE = (result: API.QuestionContentDTO) => {
+  questionContent.value = [...questionContent.value, result];
+};
+/**
+ * SSE 开始生成
+ * @param event
+ */
+const onSSEStart = (event: any) => {
+  message.success("开始生成");
+};
+/**
+ * SSE 生成完毕
+ * @param event
+ */
+const onSSEClose = (event: any) => {
+  message.success("生成完毕");
+};
 </script>
 
 <style scoped>
 .form {
-  position: absolute;
+  position: relative;
   top: 50%;
   left: 45%;
   width: 400px;
   max-width: 100%;
-  margin: -150px 0 0 -200px;
+  margin: auto 0 0 -200px;
   padding: 30px 35px 30px;
   border-radius: 8px;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.5);
