@@ -62,13 +62,13 @@ knife4j:
     password: xiaoHuang@3846
 # AI 配置
 ai:
-  apiKey: 416128eea7bff188f5c5e4f503193d9e.SMKQ1mXGqEo4W0j3
+  apiKey: 智谱ai的apikey
 
 # 对象存储服务配置
 minio:
-  # MinIO自搭建对象存储服务
+# MinIO自搭建对象存储服务
   # todo 存储服务域名
-  endpoint: http://47.120.42.45:9000
-  accessKey: M9EOLTH2OKWR7NQPKSIE
-  secretKey: 1unqUqQigxVbSB82qkUfBX28gLKEfxABahRxR646
+  endpoint: IP地址
+  accessKey: accessKey
+  secretKey: secretKey
   bucketName: file   #存储桶名称
