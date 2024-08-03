@@ -47,10 +47,9 @@
 </template>
 
 <script setup lang="ts">
-import { IconEdit, IconPlus } from "@arco-design/web-vue/es/icon";
-import { ref, withDefaults, defineProps } from "vue";
-import { uploadFileUsingPost } from "@/api/fileController";
+import { minioUploadFileUsingPost } from "@/api/minioFileController";
 import { Message } from "@arco-design/web-vue";
+import { defineProps, ref, withDefaults } from "vue";
 
 /**
  * 定义组件属性类型
@@ -81,7 +80,7 @@ if (props.value) {
 const customRequest = async (option: any) => {
   const { onError, onSuccess, fileItem } = option;
 
-  const res: any = await uploadFileUsingPost(
+  const res: any = await minioUploadFileUsingPost(
     { biz: props.biz },
     {},
     fileItem.file

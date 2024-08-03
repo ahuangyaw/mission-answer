@@ -5,6 +5,20 @@ declare namespace API {
     questionNumber?: number;
   };
 
+  type aiGenerateQuestionSSETestUsingGETParams = {
+    appId?: number;
+    optionNumber?: number;
+    questionNumber?: number;
+    /** isVip */
+    isVip?: boolean;
+  };
+
+  type aiGenerateQuestionSSEUsingGETParams = {
+    appId?: number;
+    optionNumber?: number;
+    questionNumber?: number;
+  };
+
   type App = {
     appDesc?: string;
     appIcon?: string;
@@ -100,6 +114,12 @@ declare namespace API {
     message?: string;
   };
 
+  type BaseResponseInputStreamResource_ = {
+    code?: number;
+    data?: InputStreamResource;
+    message?: string;
+  };
+
   type BaseResponseInt_ = {
     code?: number;
     data?: number;
@@ -109,6 +129,12 @@ declare namespace API {
   type BaseResponseListQuestionContentDTO_ = {
     code?: number;
     data?: QuestionContentDTO[];
+    message?: string;
+  };
+
+  type BaseResponseListString_ = {
+    code?: number;
+    data?: string[];
     message?: string;
   };
 
@@ -242,9 +268,47 @@ declare namespace API {
     id?: number;
   };
 
+  type deleteUsingPUTParams = {
+    /** filename */
+    filename: string;
+  };
+
+  type downloadFileUsingGETParams = {
+    /** objectName */
+    objectName: string;
+  };
+
+  type downloadUsingGETParams = {
+    /** filename */
+    filename: string;
+  };
+
+  type File = {
+    absolute?: boolean;
+    absoluteFile?: File;
+    absolutePath?: string;
+    canonicalFile?: File;
+    canonicalPath?: string;
+    directory?: boolean;
+    file?: boolean;
+    freeSpace?: number;
+    hidden?: boolean;
+    name?: string;
+    parent?: string;
+    parentFile?: File;
+    path?: string;
+    totalSpace?: number;
+    usableSpace?: number;
+  };
+
   type getAppVOByIdUsingGETParams = {
     /** id */
     id?: number;
+  };
+
+  type getHttpUrlUsingGETParams = {
+    /** filename */
+    filename: string;
   };
 
   type getPostVOByIdUsingGETParams = {
@@ -277,6 +341,19 @@ declare namespace API {
     id?: number;
   };
 
+  type InputStream = true;
+
+  type InputStreamResource = {
+    description?: string;
+    file?: File;
+    filename?: string;
+    inputStream?: InputStream;
+    open?: boolean;
+    readable?: boolean;
+    uri?: URI;
+    url?: URL;
+  };
+
   type LoginUserVO = {
     createTime?: string;
     id?: number;
@@ -285,6 +362,10 @@ declare namespace API {
     userName?: string;
     userProfile?: string;
     userRole?: string;
+  };
+
+  type minioUploadFileUsingPOSTParams = {
+    biz?: string;
   };
 
   type Option = {
@@ -666,8 +747,42 @@ declare namespace API {
     userId?: number;
   };
 
-  type uploadFileUsingPOSTParams = {
-    biz?: string;
+  type SseEmitter = {
+    timeout?: number;
+  };
+
+  type URI = {
+    absolute?: boolean;
+    authority?: string;
+    fragment?: string;
+    host?: string;
+    opaque?: boolean;
+    path?: string;
+    port?: number;
+    query?: string;
+    rawAuthority?: string;
+    rawFragment?: string;
+    rawPath?: string;
+    rawQuery?: string;
+    rawSchemeSpecificPart?: string;
+    rawUserInfo?: string;
+    scheme?: string;
+    schemeSpecificPart?: string;
+    userInfo?: string;
+  };
+
+  type URL = {
+    authority?: string;
+    content?: Record<string, any>;
+    defaultPort?: number;
+    file?: string;
+    host?: string;
+    path?: string;
+    port?: number;
+    protocol?: string;
+    query?: string;
+    ref?: string;
+    userInfo?: string;
   };
 
   type User = {
@@ -712,6 +827,7 @@ declare namespace API {
   type UserAnswerAddRequest = {
     appId?: number;
     choices?: string[];
+    id?: number;
   };
 
   type UserAnswerEditRequest = {
