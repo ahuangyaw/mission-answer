@@ -12,7 +12,7 @@ export default () => {
     <View className="index-page">
       <View className="at-article__h1 title">MBTI性格测试</View>
       <View className="at-article__p submit-title">
-        只需2分钟就能测出你的性格特点
+        只需2分钟就能测出你的性格特点啊啊啊
       </View>
       <AtButton
         className="enter-btn"
