@@ -24,9 +24,10 @@ spring:
   # Redis 配置
   redis:
     database: 1
-    host: localhost
+    host: 47.120.42.45
     port: 6379
     timeout: 5000
+    password: xiaoHuang@3846
   # 文件上传
   servlet:
     multipart:
@@ -102,13 +103,13 @@ knife4j:
 
 # AI 配置
 ai:
-  apiKey: 智谱ai的apikey
+  apiKey: 416128eea7bff188f5c5e4f503193d9e.SMKQ1mXGqEo4W0j3
 
 # 对象存储服务配置
 minio:
 # MinIO自搭建对象存储服务
   # todo 存储服务域名
-  endpoint: IP地址
-  accessKey: accessKey
-  secretKey: secretKey
+  endpoint: 47.120.42.45
+  accessKey: SSJAGTAKGHQ5LG17163B
+  secretKey: rU6bDbx5ZrkDK3gkeB4D+H6++92E9YI3qdHMbBSZ
   bucketName: file   #存储桶名称
